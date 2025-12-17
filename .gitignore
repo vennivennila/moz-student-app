@@ -45,6 +45,10 @@ docker-compose.override.yml
 # VS Code settings
 .vscode/
 
-# OS files
-.DS_Store
+
 Thumbs.db
+
+test-results/
+.playwright/
+dist/
+
