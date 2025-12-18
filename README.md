@@ -9,7 +9,11 @@ The project clearly demonstrates how data moves from the user interface to the d
 **Data Flow:**
 
 ```
+<<<<<<< HEAD
 Svelte Frontend → Node.js Backend → GraphQL API → MongoDB Atlas flow
+=======
+Svelte Frontend → Node.js Backend → GraphQL API → MongoDB Atlas
+>>>>>>> origin/main
 ```
 
 ---
