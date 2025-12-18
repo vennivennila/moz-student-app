@@ -1,17 +1,25 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test('Form submits successfully', async ({ page }) => {
-  await page.goto('http://localhost:5173')
 
-  await page.fill('input[placeholder="Full Name"]', 'Vennila')
-  await page.fill('input[placeholder="Email"]', 'ven123@gmail.com')
-  await page.fill('input[placeholder="Phone"]', '9876543210')
-  await page.fill('textarea', 'Hello')
+  // Mock backend API
+  await page.route('**/api/**', route => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true })
+    });
+  });
 
-  await page.getByRole('button', { name: /submit/i }).click()
+  await page.goto('http://localhost:5173');
 
-  await page.waitForLoadState('networkidle')
+  await page.fill('input[placeholder="Full Name"]', 'Vennila');
+  await page.fill('input[placeholder="Email"]', 'ven123@gmail.com');
+  await page.fill('input[placeholder="Phone"]', '9876543210');
+  await page.fill('textarea', 'Hello');
 
-  const successMsg = page.getByText('Student registered successfully')
-  await expect(successMsg).toBeVisible({ timeout: 15000 })
-})
+  await page.getByRole('button', { name: /submit/i }).click();
+
+  const successMsg = page.getByText('Student registered successfully');
+  await expect(successMsg).toBeVisible({ timeout: 15000 });
+});
