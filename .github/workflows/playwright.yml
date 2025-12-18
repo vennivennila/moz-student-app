@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright UI Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  ui-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,14 @@ jobs:
       - name: Install Playwright browsers
         working-directory: frontend
         run: npx playwright install --with-deps
+
+      - name: Start dev server
+        working-directory: frontend
+        run: npm run dev &
+      
+      - name: Wait for server
+        working-directory: frontend
+        run: npx wait-on http://localhost:5173
 
       - name: Run Playwright tests
         working-directory: frontend
