@@ -1,0 +1,49 @@
+name: Run Tests
+
+# Trigger workflow on push or pull request
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
+
+      # 4️⃣ Run unit tests (Jest)
+      - name: Run unit tests
+        working-directory: frontend
+        run: npm test
+
+      # 5️⃣ Install Playwright browsers
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps
+
+      # 6️⃣ Run Playwright UI tests
+      - name: Run UI tests
+        working-directory: frontend
+        run: npx playwright test --reporter=list --workers=1
+
+      # 7️⃣ Upload Playwright test results as artifact
+      - name: Upload Playwright Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-results
+          path: frontend/test-results/
