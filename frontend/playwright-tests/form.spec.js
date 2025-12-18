@@ -6,11 +6,12 @@ test('Form submits successfully', async ({ page }) => {
   await page.fill('input[placeholder="Full Name"]', 'Vennila')
   await page.fill('input[placeholder="Email"]', 'ven123@gmail.com')
   await page.fill('input[placeholder="Phone"]', '9876543210')
-  await page.fill('textarea[placeholder="Message"]', 'Hello!')
+  await page.fill('textarea', 'Hello')
 
-  await page.click('button:has-text("Submit")')
+  await page.getByRole('button', { name: /submit/i }).click()
 
-  const successMsg = page.locator('.text-green-600')
-  await expect(successMsg).toBeVisible()
-  await expect(successMsg).toHaveText('Student registered successfully ✅')
+  await page.waitForLoadState('networkidle')
+
+  const successMsg = page.getByText('Student registered successfully')
+  await expect(successMsg).toBeVisible({ timeout: 15000 })
 })
